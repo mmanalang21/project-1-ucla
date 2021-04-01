@@ -26,7 +26,7 @@ body {
 h2, h3, .form-label {
     color: rgb(253, 7, 220);
     font-weight: normal;
-    font-family: Chalkduster, fantasy;
+    font-family: fantasy;
 }
 
 /* Start Media Queries */
