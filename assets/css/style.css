@@ -12,9 +12,11 @@ body {
     color: rgb(85, 243, 12);
     font-weight: bold;
 }
-.app-title, p {
-    text-align: center;    
+.app-title, P {
+    text-align: center;
 }
+
+
 
 /* apply style to card */
 .card, .subtitle {
