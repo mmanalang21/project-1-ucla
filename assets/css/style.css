@@ -1,18 +1,19 @@
 body {
-    background-color: rgb(60, 110, 60);
-    background-image: url("../images/coffee\ hero.jpg");
+    background-color: rgb(82, 163, 240);
+    background-image: url("../images/pastry.jpg");
     background-size: cover;
     background-attachment: fixed;
-    background-position: 80%;
+    background-position: 20%;
     
 }
 
 /* apply style to hero */
 .hero {
-    background-color: grey;
+    color: rgb(85, 243, 12);
+    font-weight: bold;
 }
-.app-title, p {
-    text-align: center;    
+.app-title, P {
+    text-align: center;
 }
 
 /* apply style to card */
@@ -21,9 +22,9 @@ body {
 }
 
 h2, h3, .form-label {
-    color: white;
+    color: rgb(253, 7, 220);
     font-weight: normal;
-    font-family: Chalkduster, fantasy;
+    font-family: fantasy;
 }
 
 /* Start Media Queries */
