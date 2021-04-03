@@ -3,8 +3,20 @@ var userFormEl = document.querySelector("#user-form");
 var zipcodeInputEl = document.querySelector("#zipcode");
 var shopSearchTerm = document.querySelector("#shop-search-term");
 var shopContainerE1 = document.querySelector("#shop-container");
+
 var placeid_json = [];
 var map;
+
+var zipContainerEl = document.querySelector("#zip-container");
+var placeid_json = [];
+var map;
+var counter = 0;
+
+// Create an empty array to store maps Urls
+var mapsUrls = [];
+
+// Clear localStorage on page refresh
+localStorage.clear();
 
 // create formSubmitHandler 
 var formSubmitHandler = function(event) {
@@ -12,6 +24,31 @@ var formSubmitHandler = function(event) {
     var zipcode = parseInt(zipcodeInputEl.value.trim());
 
     if (zipcode && !isNaN(zipcode)) {
+      
+      // Reset Counter to 0
+      counter = 0;
+
+      // Get the existing data
+      var existing = localStorage.getItem('zipCollection');
+
+      // If no existing data, create an array
+      // Otherwise, convert the localStorage string to an array
+      existing = existing ? existing.split(',') : [];
+
+      // Add new data to localStorage Array
+      existing.push(zipcode);
+
+      // Save back to localStorage
+      localStorage.setItem('zipCollection', existing.toString());
+
+      // Store stored Zipcodes into Array
+      var updatedList = localStorage.getItem('zipCollection');
+
+      // This displays list of previously searched Zipcode
+      displayZips(updatedList.split(','));
+
+      // This displays list of Shop names along with Google Maps links
+
       getShopLocations(zipcode);
 
       // clear old content
@@ -20,6 +57,29 @@ var formSubmitHandler = function(event) {
     } else {
       alert("please enter a zipcode");
     }
+};
+
+// create function to display titles of roasteries within a zipcode area 
+var displayZips = function(zipcodes) {
+
+  // Here, we're clearing out whatever Zipcodes were displayed
+  // on the page before. This prevents stacking.
+  while (zipContainerEl.firstChild) {
+    zipContainerEl.firstChild.remove()
+  } 
+
+  // create for loop over arrays
+   for(var i = 0; i < zipcodes.length; i++) {      
+    // format shop name
+    var zipcode = zipcodes[i] + " ";
+
+    var zipcodeEl = document.createElement("p");
+    zipcodeEl.textContent = zipcode;
+
+    var zipContainer = document.getElementById("zip-container");
+
+    zipContainer.appendChild(zipcodeEl);
+  }
 };
 
 // fetch yelp API for coffee roasterie locations 
@@ -40,8 +100,12 @@ var getShopLocations = function(zipcode) {
        if (response.ok) {
           // console.log(response);
        response.json().then(function(data) {
+         
             console.log(data);
         
+            // console.log(data.businesses);
+
+
             var shops = data.businesses;
             var addresses = [];
 
@@ -64,12 +128,30 @@ var getShopLocations = function(zipcode) {
             addresses.forEach(function(address){
               googleMapsApi(address);
             });
+
+            // console.log(addresses)
+
+            // Render Names of Cafes to Page
+            displayShops(shops, zipcode);
+
+            for (let i=0; i < addresses.length; i++) {
+              googleMapsApi(addresses[i], data.businesses[i].name)
+            }
+            
+            // addresses.forEach(function(address){
+            //   googleMapsApi(address, data.businesses.name);
+            // });
+
         });
       } 
     });
 };
 
+
 var googleMapsApi = function(address) {
+
+var googleMapsApi = function(address, shopName) {
+
   var mapsApiUrl = 
   "https://lit-plateau-00456.herokuapp.com/https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=" + address + "&inputtype=textquery" + "&key=AIzaSyDDSQ7-2E776J2wfUyGQ7gac5SKdzZvUtc"
 
@@ -86,15 +168,25 @@ var googleMapsApi = function(address) {
        // console.log(response);
     response.json().then(function(data) {
       var placeId = data.candidates[0].place_id;
+
       getMaps(placeId);
+
+      getMaps(placeId, shopName);
+
      });
    } 
   });
 }
 
+
 let counter = 0
 
 var getMaps = function(placeId) {
+
+
+
+var getMaps = function(placeId, shopName) {
+
   var mapsApiUrl = 
   "https://lit-plateau-00456.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?placeid=" + placeId + "&key=AIzaSyDDSQ7-2E776J2wfUyGQ7gac5SKdzZvUtc"
 
@@ -110,11 +202,17 @@ var getMaps = function(placeId) {
     if (response.ok) {
        // console.log(response);
     response.json().then(function(data) {
+
       var mapsUrl = data.result.url;
 
       // Render Names of Cafes to Page
       displayMapsUrls(mapsUrl, counter);
       counter++;
+
+      // console.log(data);
+
+      displayMapsUrls(data.result.url, shopName);
+
      });
    } 
   });
@@ -123,6 +221,7 @@ var getMaps = function(placeId) {
 // create function to display titles of roasteries within a zipcode area 
 var displayShops = function(shops, searchTerm) {
     shopSearchTerm.textContent = searchTerm;
+
     
     // create for loop over arrays
      for(var i = 0; i < shops.length; i++) {
@@ -133,11 +232,32 @@ var displayShops = function(shops, searchTerm) {
       titleEl.textContent = shopName;
       titleEl.setAttribute("class", "shopName");
 
+
+    // console.log(shops);
+
+    // Remove duplicate shopNames from shops
+    var newShops = shops.reduce(function(a,b){
+      if (a.indexOf(b.name) < 0 ) a.push(b.name);
+      return a;
+    },[]);
+
+    // create for loop over arrays
+     for(var i = 0; i < newShops.length; i++) {      
+      
+      // format shop name
+      var shopName = newShops[i];
+
+      var titleEl = document.createElement("p");
+      titleEl.textContent = shopName + " ";
+      titleEl.setAttribute("id", shopName.replace(/\s/g, ""));
+
+
       var shopContainer = document.getElementById("shop-container");
 
       shopContainer.appendChild(titleEl);
     }
 };
+
 
 var displayMapsUrls = function(mapsUrl, counter) {
   var clickMapUrl = document.createElement("a");
@@ -149,6 +269,19 @@ var displayMapsUrls = function(mapsUrl, counter) {
   var titles = document.getElementsByClassName("shopName");
     
   titles[counter].appendChild(clickMapUrl);
+=======
+var displayMapsUrls = function(mapsUrl, shopName) {
+  var clickMapUrl = document.createElement("a");
+  clickMapUrl.href = mapsUrl;
+  clickMapUrl.setAttribute("target", "_blank")
+  clickMapUrl.setAttribute("style", "display: block;")
+  
+  clickMapUrl.textContent = "Click Here to View Location Details";
+
+  var title = document.getElementById(`${shopName.replace(/\s/g, "")}`);
+
+  title.appendChild(clickMapUrl);
+
 }
 
 // create addEventListenrer to form container 

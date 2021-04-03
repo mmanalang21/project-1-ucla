@@ -13,6 +13,8 @@
   <header class="hero">
       <h1 class="app-title"> Raving Roasteries</h1>
       <p>Search for the best roasteries in town and support local businessesd!</p>
+      <h1 class="app-title"> RAVING ROASTERIES</h1>
+      <p>For the best roasteries in town enter your zipcode below!</p>
   </header>
 
   <main class="flex-row justify-space-between">
@@ -30,7 +32,27 @@
       <div class="col-12 col-md-8">
           <h2 class="subtitle">Roasteries Search Results: <span id="shop-search-term"></span></2>
           <div id="shop-container" class="list-group"></div>
+
+        <div class="card">
+            <h3 class="card-header text-uppercase"></h3>
+            <form id="user-form" class="car-body">
+                <label class="form-label" for="searchbar"></label>
+                <input name="zipcode" id="zipcode" type="text" autofocus="true" class="form-input"/>
+                <button id="submit" type="submit" class="btn">Search</button>
+            </form>
+        </div>
       </div>
+
+      <div class="col-12 col-md-8">
+            <h2 class="subtitle">Previously Searched Zipcodes: <span></span></2>
+            <div id="zip-container" class="list-group"></div>
+      </div>
+
+      <div class="col-12 col-md-8">
+            <h2 class="subtitle">Showing Roasteries Search Results: <span id="shop-search-term"></span></2>
+            <div id="shop-container" class="list-group"></div>
+      </div>
+    
   </main>
     <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyDDSQ7-2E776J2wfUyGQ7gac5SKdzZvUtc"></script>
     <script src="./assets/js/script.js"></script>
