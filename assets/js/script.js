@@ -212,7 +212,7 @@ var displayMapsUrls = function(mapsUrl, shopName) {
   clickMapUrl.setAttribute("target", "_blank")
   clickMapUrl.setAttribute("style", "display: block;")
   
-  clickMapUrl.textContent = "Click Here to View Location";
+  clickMapUrl.textContent = "Click Here to View Location Details";
 
   var title = document.getElementById(`${shopName.replace(/\s/g, "")}`);
 
