@@ -46,7 +46,7 @@ var formSubmitHandler = function(event) {
       getShopLocations(zipcode);
 
       // clear old content
-      shopContainerE1.textContent = "";
+      shopContainerE1.textContent = "Searching";
       zipcodeInputEl.value = "";
     } else {
       alert("please enter a zipcode");
@@ -180,7 +180,8 @@ var getMaps = function(placeId, shopName) {
 
 // create function to display titles of roasteries within a zipcode area 
 var displayShops = function(shops, searchTerm) {
-    shopSearchTerm.textContent = searchTerm;
+  shopContainerE1.textContent = "";
+  shopSearchTerm.textContent = searchTerm;
 
     // console.log(shops);
 
