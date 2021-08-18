@@ -19,3 +19,4 @@ https://mmanalang21.github.io/project-1-ucla/
 
 ## Contribution
 Made by Alejandro Robles, Raghav Ramanan & Matthew Manalang
+ 
