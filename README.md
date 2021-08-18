@@ -18,4 +18,4 @@ Create a real-world front-end application to be able to showcase to potential em
 https://mmanalang21.github.io/project-1-ucla/
 
 ## Contribution
-Made by Alejandro Robles & Matthew Manalang
+Made by Alejandro Robles, Raghav Ramanan & Matthew Manalang
